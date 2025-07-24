@@ -4,7 +4,7 @@
             <Multipier :multiplier-num="multiplier" />
 
             <div class="flex my-4 space-x-4 items-end">
-                <AmountInput v-model="amount" label="Bet Amount" :min="1" :max="1000" placeholder="Enter bet amount"
+                <BaseInput v-model="amount" label="Bet Amount" :min="1" :max="1000" placeholder="Enter bet amount"
                     :error="error" />
                 <Button @click="handleBet" variant="primary">
                     Bet (Next round)
@@ -28,11 +28,11 @@
 import GameContainer from '../common/GameContainer.vue'
 import Button from '../common/Button.vue'
 import Multipier from '../common/Multiplier.vue'
-import AmountInput from '../common/AmountInput.vue'
 import { onMounted, ref, onUnmounted } from 'vue'
+import BaseInput from '../common/BaseInput.vue'
 
 const multiplier = ref(1.0)
-let timer: number | undefined = undefined
+let timer: NodeJS.Timer | undefined = undefined
 
 const amount = ref<number | null>(null)
 const error = ref('')

@@ -12,22 +12,25 @@
                 </h1>
             </div>
             <div class="flex items-center space-x-2">
-                <button @click="handleLogin"
-                    class="px-4 py-2 rounded bg-purple-500 text-white font-semibold hover:bg-purple-600 transition cursor-pointer">Login</button>
-                <button @click="handleRegister"
-                    class="px-4 py-2 rounded bg-pink-500 text-white font-semibold hover:bg-pink-600 transition cursor-pointer">Register</button>
+                <Button variant="primary" @click="showAuth('login')">Login</button>
+                <Button variant="secondary" @click="showAuth('register')">Register</button>
             </div>
         </div>
     </header>
+    <AuthModal :open="modalOpen" @close="modalOpen = false" :mode="modalMode" />
 </template>
 
 <script setup lang="ts">
-function handleLogin() {
-    console.log('Login clicked')
-    alert('Mock login logic')
+import { ref } from 'vue';
+import AuthModal from './AuthModal.vue'
+import Button from '../common/Button.vue'
+
+const modalOpen = ref(false);
+const modalMode = ref<'login' | 'register'>('login');
+
+function showAuth(mode: 'login' | 'register') {
+    modalMode.value = mode;
+    modalOpen.value = true;
 }
-function handleRegister() {
-    console.log('Register clicked')
-    alert('Mock register logic')
-}
+
 </script>
