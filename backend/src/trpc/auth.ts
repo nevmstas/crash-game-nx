@@ -1,7 +1,7 @@
 import { router, publicProcedure } from './trpc';
 import { RegisterSchema, LoginSchema } from '@crash-game-nx/shared-types';
 import { isAuthed } from './middleware/isAuthed';
-import { AuthService } from './authService';
+import { AuthService } from '../services/authService';
 import { z } from 'zod';
 
 export const authRouter = router({
