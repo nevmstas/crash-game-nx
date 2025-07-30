@@ -3,13 +3,11 @@ import { middleware } from '../trpc';
 import jwt from 'jsonwebtoken';
 
 export const isAuthed = middleware(async ({ ctx, next }) => {
-  const authHeader = ctx.req?.headers?.authorization;
+  const token = ctx.req.cookies['access_token'];
 
-  if (!authHeader?.startsWith('Bearer ')) {
+  if (!token) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'No token provided' });
   }
-
-  const token = authHeader.split(' ')[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
@@ -19,10 +17,14 @@ export const isAuthed = middleware(async ({ ctx, next }) => {
 
     return next({
       ctx: {
+        ...ctx,
         user: decoded,
       },
     });
-  } catch {
+  } catch (err: any) {
+    if (err.name === 'TokenExpiredError') {
+      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'jwt expired' });
+    }
     throw new TRPCError({ code: 'FORBIDDEN', message: 'Invalid token' });
   }
 });
