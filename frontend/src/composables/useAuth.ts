@@ -1,28 +1,48 @@
-import { useMutation, useQuery } from '@tanstack/vue-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { trpc } from '../api/trpc';
 import { LoginInput, RegisterInput } from '@crash-game-nx/shared-types';
 
 export function useAuth() {
+  const queryClient = useQueryClient();
+
   const login = useMutation({
     mutationFn: async (data: LoginInput) => {
-      const res = await trpc.auth.login.mutate(data);
-      localStorage.setItem('token', res.token);
-      return res;
+      return await trpc.auth.login.mutate(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['me'] });
     },
   });
 
   const register = useMutation({
     mutationFn: async (data: RegisterInput) => {
-      const res = await trpc.auth.register.mutate(data);
-      return res;
+      return await trpc.auth.register.mutate(data);
+    },
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      await trpc.auth.logout.mutate();
+      queryClient.clear();
+      queryClient.invalidateQueries({ queryKey: ['me'] });
     },
   });
 
   const me = useQuery({
     queryKey: ['me'],
-    queryFn: () => trpc.auth.me.query(),
-    enabled: !!localStorage.getItem('token'),
+    queryFn: async () => {
+      try {
+        return await trpc.auth.me.query();
+      } catch (err: any) {
+        if (err.message.includes('Invalid token')) {
+          await trpc.auth.refreshToken.mutate();
+          return await trpc.auth.me.query();
+        }
+        throw err;
+      }
+    },
+    retry: false,
   });
 
-  return { login, me, register };
+  return { login, me, register, logout: mutate };
 }

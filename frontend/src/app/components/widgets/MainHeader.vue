@@ -11,9 +11,19 @@
                     NX Crash Game
                 </h1>
             </div>
+
             <div class="flex items-center space-x-2">
-                <Button variant="primary" @click="showAuth('login')">Login</button>
-                <Button variant="secondary" @click="showAuth('register')">Register</button>
+                <template v-if="me.data?.value?.username">
+                    <span class="font-semibold text-white">{{ me.data?.value?.username }}</span>
+                    <button @click="logout()"
+                        class="px-4 py-2 rounded bg-gray-700 text-white font-semibold hover:bg-gray-800 transition cursor-pointer">
+                        Logout
+                    </button>
+                </template>
+                <template v-else>
+                    <Button variant="primary" @click="showAuth('login')">Login</button>
+                    <Button variant="secondary" @click="showAuth('register')">Register</button>
+                </template>
             </div>
         </div>
     </header>
@@ -22,8 +32,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useAuth } from '../../../composables/useAuth';
 import AuthModal from './AuthModal.vue'
 import Button from '../common/Button.vue'
+
+const { me, logout } = useAuth();
 
 const modalOpen = ref(false);
 const modalMode = ref<'login' | 'register'>('login');
