@@ -23,8 +23,9 @@ export function useAuth() {
   const { mutate } = useMutation({
     mutationFn: async () => {
       await trpc.auth.logout.mutate();
-      queryClient.clear();
-      queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(['me'], null);
     },
   });
 

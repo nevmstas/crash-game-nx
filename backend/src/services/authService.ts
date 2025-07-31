@@ -121,6 +121,11 @@ export class AuthService {
   }
 
   static async logout(ctx: Context) {
+    const refreshToken = ctx.req.cookies['refresh_token'];
+    if (refreshToken) {
+      await prisma.refreshToken.delete({ where: { token: refreshToken } });
+    }
+
     ctx.res.clearCookie('access_token');
     ctx.res.clearCookie('refresh_token');
     return { success: true };
