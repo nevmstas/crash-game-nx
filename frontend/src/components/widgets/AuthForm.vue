@@ -19,9 +19,9 @@
 
 <script setup lang='ts'>
 import { ref, watch } from 'vue';
-import { useAuth } from '../../../composables/useAuth';
-import BaseInput from '../common/BaseInput.vue';
-import Button from '../common/Button.vue';
+import { useAuth } from '../../composables/useAuth';
+import BaseInput from '../ui/BaseInput.vue';
+import Button from '../ui/Button.vue';
 
 const props = defineProps<{ mode: 'login' | 'register' }>();
 const emit = defineEmits(['success', 'toggle']);

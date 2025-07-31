@@ -32,9 +32,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuth } from '../../../composables/useAuth';
-import AuthModal from './AuthModal.vue'
-import Button from '../common/Button.vue'
+import { useAuth } from '../../composables/useAuth';
+import AuthModal from '../widgets/AuthModal.vue'
+import Button from '../ui/Button.vue'
 
 const { me, logout } = useAuth();
 

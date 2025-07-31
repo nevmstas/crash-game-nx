@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import BaseModal from '../common/BaseModal.vue';
-import AuthForm from './AuthForm.vue';
+import BaseModal from '../ui/BaseModal.vue';
+import AuthForm from '../widgets/AuthForm.vue';
 
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits(['close', 'success']);

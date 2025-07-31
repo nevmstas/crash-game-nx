@@ -25,11 +25,11 @@
 
 
 <script setup lang="ts">
-import GameContainer from '../common/GameContainer.vue'
-import Button from '../common/Button.vue'
-import Multipier from '../common/Multiplier.vue'
+import GameContainer from '../ui/GameContainer.vue'
+import Button from '../ui/Button.vue'
+import Multipier from '../ui/Multiplier.vue'
 import { onMounted, ref, onUnmounted } from 'vue'
-import BaseInput from '../common/BaseInput.vue'
+import BaseInput from '../ui/BaseInput.vue'
 
 const multiplier = ref(1.0)
 let timer: NodeJS.Timer | undefined = undefined
